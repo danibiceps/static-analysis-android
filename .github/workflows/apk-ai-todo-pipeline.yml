@@ -1,4 +1,4 @@
-﻿name: AI APK SAST & To-Do Generator
+name: AI APK SAST & To-Do Generator
 
 on:
   push:
