@@ -1,0 +1,43 @@
+name: AI APK SAST & To-Do Generator
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  static-analysis-todo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python & Java
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install JADX and Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jadx
+          pip install google-genai
+
+      - name: Decompile APK
+        run: |
+          # Note: Make sure your target APK in the repository is named app-release.apk
+          # or update 'app-release.apk' below to match your actual file name.
+          jadx -d decompiled_apk app-release.apk
+
+      - name: Generate AI Security To-Do List
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python .github/scripts/ai_todo_generator.py
+
+      - name: Save To-Do List Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Security-Remediation-ToDo
+          path: SECURITY_TODO.md
