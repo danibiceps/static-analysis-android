@@ -30,7 +30,7 @@ def main():
 
     print("Sending decompiled metadata to Gemini for security analysis...")
     response = client.models.generate_content(
-        model='gemini-2.5-flash',
+        model='gemini-3.6-flash',
         contents=prompt
     )
 
