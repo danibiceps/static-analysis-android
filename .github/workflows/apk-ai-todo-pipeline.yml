@@ -15,7 +15,7 @@ jobs:
         with:
           lfs: true
 
-      - name: Set up Python & Java
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
@@ -26,12 +26,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Download & Install JADX
+      - name: Install Dependencies & Setup JADX
         run: |
           pip install google-genai
           wget https://github.com/skylot/jadx/releases/download/v1.5.0/jadx-1.5.0.zip
-          unzip jadx-1.5.0.zip -d jadx_bin
-          echo "C:\Users\C3ihub\static-analysis-android/jadx_bin/bin" >> 
+          unzip -q jadx-1.5.0.zip -d jadx_bin
+          chmod +x jadx_bin/bin/jadx
+          echo "$PWD/jadx_bin/bin" >> $GITHUB_PATH
 
       - name: Decompile APK
         run: |
